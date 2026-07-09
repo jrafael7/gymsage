@@ -5,6 +5,7 @@ export interface Exercise {
   image?: string;
   description: string;
   isLumbarSafe: boolean;
+  isKneeSafe: boolean;
   type: ExerciseType;
   instructions: string;
   substitutions: string[];
@@ -101,4 +102,17 @@ export interface Suggestion {
   division: DivisionName;
   reason: string;
   confidence: 'alta' | 'média' | 'baixa';
+}
+
+export interface DailyCheckIn {
+  id: string;
+  date: string; // ISO date string (YYYY-MM-DD)
+  energyLevel: 'muito-cansado' | 'cansado' | 'normal' | 'bem' | 'muito-bem';
+  squashToday: boolean;
+  squashTomorrow: boolean;
+  otherActivity: string; // e.g., "corrida", "ciclismo", "nada"
+  lumbarStatus: 'bem' | 'tensão' | 'dor';
+  kneeStatus: 'bem' | 'tensão' | 'dor';
+  notes: string;
+  createdAt: Date;
 }

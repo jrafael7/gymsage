@@ -48,6 +48,7 @@ export const ExercisesScreen: React.FC = () => {
       muscleGroup: newExercise.muscleGroup as any,
       description: newExercise.description,
       isLumbarSafe: newExercise.isLumbarSafe,
+      isKneeSafe: true,
       type: newExercise.type as any,
       instructions: newExercise.instructions,
       substitutions: [],

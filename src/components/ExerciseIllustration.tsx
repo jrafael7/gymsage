@@ -6,573 +6,969 @@ interface ExerciseIllustrationProps {
   size?: number;
 }
 
-// Paleta de cores sofisticada
-const PALETTE = {
-  bg: '#f8f9fa',
-  skin: '#f4a261',
-  skinDark: '#e76f51',
-  shirt: '#2a9d8f',
-  shirtDark: '#264653',
-  pants: '#6c757d',
-  shoes: '#1a1a1a',
-  machine: '#495057',
-  machineLight: '#adb5bd',
-  machineDark: '#343a40',
-  accent: '#e9c46a',
-  line: '#264653',
+// Cores vibrantes e contrastantes — estilo flat illustration fitness profissional
+const C = {
+  bg: '#f0f4f8',
+  floor: '#e2e8f0',
+  skin: '#ffab76',
+  skinShadow: '#e07a4e',
+  shirt: '#00b4d8',
+  shirtDark: '#0077b6',
+  pants: '#2d3748',
+  pantsLight: '#4a5568',
+  shoes: '#1a202c',
+  machine: '#718096',
+  machineDark: '#4a5568',
+  machineLight: '#a0aec0',
+  accent: '#f6e05e',
+  accentDark: '#d69e2e',
+  red: '#fc8181',
+  green: '#68d391',
+  white: '#ffffff',
+  text: '#1a202c',
+  arrow: '#e53e3e',
 };
+
+// Figura humana base (estilo isométrico flat)
+const Head = ({ cx, cy, r = 14 }: { cx: number; cy: number; r?: number }) => (
+  <g>
+    <circle cx={cx} cy={cy} r={r} fill={C.skin} />
+    <circle cx={cx - 4} cy={cy - 3} r={2} fill={C.text} />
+    <circle cx={cx + 4} cy={cy - 3} r={2} fill={C.text} />
+    <path d={`M${cx - 5} ${cy + 4} Q${cx} ${cy + 8} ${cx + 5} ${cy + 4}`} stroke={C.text} strokeWidth={2} fill="none" strokeLinecap="round" />
+  </g>
+);
+
+const Torso = ({ x1, y1, x2, y2, w = 20 }: { x1: number; y1: number; x2: number; y2: number; w?: number }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.shirt} strokeWidth={w} strokeLinecap="round" />
+);
+
+const Arm = ({ x1, y1, x2, y2, w = 10 }: { x1: number; y1: number; x2: number; y2: number; w?: number }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.skin} strokeWidth={w} strokeLinecap="round" />
+);
+
+const Leg = ({ x1, y1, x2, y2, w = 14 }: { x1: number; y1: number; x2: number; y2: number; w?: number }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.pants} strokeWidth={w} strokeLinecap="round" />
+);
+
+const Foot = ({ cx, cy, rx = 12, ry = 5 }: { cx: number; cy: number; rx?: number; ry?: number }) => (
+  <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill={C.shoes} />
+);
+
+const Arrow = ({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) => (
+  <g>
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+        <polygon points="0 0, 10 3.5, 0 7" fill={C.arrow} />
+      </marker>
+    </defs>
+    <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.arrow} strokeWidth={3} strokeLinecap="round" markerEnd="url(#arrowhead)" strokeDasharray="6 4" />
+  </g>
+);
+
+const MachineBase = ({ x, y, w, h, rx = 8 }: { x: number; y: number; w: number; h: number; rx?: number }) => (
+  <rect x={x} y={y} width={w} height={h} rx={rx} fill={C.machineDark} />
+);
+
+const MachinePad = ({ x, y, w, h, rx = 6 }: { x: number; y: number; w: number; h: number; rx?: number }) => (
+  <rect x={x} y={y} width={w} height={h} rx={rx} fill={C.accent} />
+);
+
+const Bar = ({ x1, y1, x2, y2, w = 8 }: { x1: number; y1: number; x2: number; y2: number; w?: number }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={C.machineDark} strokeWidth={w} strokeLinecap="round" />
+);
+
+const Weight = ({ cx, cy, r = 14 }: { cx: number; cy: number; r?: number }) => (
+  <circle cx={cx} cy={cy} r={r} fill={C.machineLight} stroke={C.machineDark} strokeWidth={2} />
+);
+
+const Bench = ({ x, y, w, h }: { x: number; y: number; w: number; h: number }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={6} fill={C.machineDark} />
+    <rect x={x + 5} y={y + 5} width={w - 10} height={h - 10} rx={4} fill={C.machine} />
+  </g>
+);
+
+const Floor = () => (
+  <rect x={0} y={160} width={200} height={40} fill={C.floor} />
+);
 
 export const ExerciseIllustration: React.FC<ExerciseIllustrationProps> = ({ exercise, size = 200 }) => {
-  const illustrations: Record<string, React.ReactNode> = {
-    'leg-press-001': <LegPressIllustration size={size} />,
-    'extensao-pernas-001': <LegExtensionIllustration size={size} />,
-    'flexao-pernas-001': <LegCurlIllustration size={size} />,
-    'adutores-001': <AdductorIllustration size={size} />,
-    'abducoes-001': <AbductorIllustration size={size} />,
-    'panturrilha-001': <CalfRaiseIllustration size={size} />,
-    'puxada-frontal-001': <LatPulldownIllustration size={size} />,
-    'remada-sentada-001': <SeatedRowIllustration size={size} />,
-    'face-pull-001': <FacePullIllustration size={size} />,
-    'hyperextension-001': <HyperextensionIllustration size={size} />,
-    'pullover-001': <PulloverIllustration size={size} />,
-    'peito-maquina-001': <ChestPressIllustration size={size} />,
-    'peito-inclinado-001': <InclinePressIllustration size={size} />,
-    'crossover-001': <CrossoverIllustration size={size} />,
-    'peck-deck-001': <PecDeckIllustration size={size} />,
-    'flexoes-001': <PushUpIllustration size={size} />,
-    'rosca-biceps-001': <BicepCurlIllustration size={size} />,
-    'rosca-haltere-001': <DumbbellCurlIllustration size={size} />,
-    'triceps-corda-001': <TricepRopeIllustration size={size} />,
-    'triceps-maquina-001': <TricepMachineIllustration size={size} />,
-    'rosca-martelo-001': <HammerCurlIllustration size={size} />,
-    'triceps-frances-001': <TricepFrenchIllustration size={size} />,
-    'prancha-001': <PlankIllustration size={size} />,
-    'bridge-001': <BridgeIllustration size={size} />,
-    'bird-dog-001': <BirdDogIllustration size={size} />,
-    'dead-bug-001': <DeadBugIllustration size={size} />,
-    'vacuo-abdominal-001': <StomachVacuumIllustration size={size} />,
-    'prancha-lateral-001': <SidePlankIllustration size={size} />,
-    'pallof-press-001': <PallofPressIllustration size={size} />,
-    'rotacao-quadril-001': <HipRotationIllustration size={size} />,
-    'abertura-tornozelo-001': <AnkleOpenIllustration size={size} />,
-    'thoracic-rotation-001': <ThoracicRotationIllustration size={size} />,
-    'cat-cow-001': <CatCowIllustration size={size} />,
-    '9090-hip-001': <Hip9090Illustration size={size} />,
-    'single-leg-balance-001': <BalanceIllustration size={size} />,
-    'mobilidade-ombros-001': <ShoulderMobilityIllustration size={size} />,
-  };
+  const id = exercise.id;
 
   return (
-    <div className="exercise-illustration" style={{ width: size, height: size }}>
-      {illustrations[exercise.id] || <GenericIllustration size={size} exercise={exercise} />}
-    </div>
+    <svg width={size} height={size} viewBox="0 0 200 200" style={{ borderRadius: 12 }}>
+      <rect width={200} height={200} fill={C.bg} rx={12} />
+      <Floor />
+      {renderExercise(id)}
+    </svg>
   );
 };
 
-const GenericIllustration: React.FC<{ size: number; exercise: Exercise }> = ({ size, exercise }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="80" r="40" fill={PALETTE.machineLight} />
-    <rect x="70" y="120" width="60" height="50" rx="8" fill={PALETTE.accent} />
-    <text x="100" y="100" textAnchor="middle" fontSize="24" fill={PALETTE.line} fontWeight="700">
-      {exercise.name.substring(0, 2).toUpperCase()}
-    </text>
-  </svg>
-);
+function renderExercise(id: string): React.ReactNode {
+  switch (id) {
+    // ===================== PERNAS =====================
+    case 'leg-press-001':
+      return (
+        <g>
+          <MachineBase x={30} y={120} w={140} h={50} />
+          <MachinePad x={50} y={105} w={100} h={15} />
+          <rect x={45} y={75} width={110} height={30} rx={4} fill={C.machine} />
+          <rect x={50} y={80} width={100} height={20} rx={3} fill={C.accent} />
+          <Head cx={100} cy={60} />
+          <Torso x1={100} y1={75} x2={100} y2={105} w={22} />
+          <Leg x1={85} y1={105} x2={85} y2={65} w={16} />
+          <Leg x1={115} y1={105} x2={115} y2={65} w={16} />
+          <Foot cx={85} cy={60} rx={14} ry={6} />
+          <Foot cx={115} cy={60} rx={14} ry={6} />
+          <Arrow x1={70} y1={50} x2={70} y2={90} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>LEG PRESS</text>
+        </g>
+      );
 
-// Componente base para figura humana estilizada
-const HumanFigure: React.FC<{ 
-  size: number; 
-  pose: 'standing' | 'seated' | 'lying' | 'plank' | 'bridge' | 'pushup' | 'bird-dog' | 'dead-bug';
-  x?: number;
-  y?: number;
-  scale?: number;
-}> = ({ size, pose, x = 100, y = 100, scale = 1 }) => {
-  const s = scale;
-  const bx = x;
-  const by = y;
-  
-  return (
-    <g>
-      {/* Cabeça */}
-      <circle cx={bx} cy={by - 45*s} r={12*s} fill={PALETTE.skin} />
-      {/* Tronco */}
-      <rect x={bx - 15*s} y={by - 30*s} width={30*s} height={40*s} rx={6*s} fill={PALETTE.shirt} />
-      {/* Braços */}
-      <line x1={bx - 15*s} y1={by - 20*s} x2={bx - 30*s} y2={by + 5*s} stroke={PALETTE.skin} strokeWidth={6*s} strokeLinecap="round" />
-      <line x1={bx + 15*s} y1={by - 20*s} x2={bx + 30*s} y2={by + 5*s} stroke={PALETTE.skin} strokeWidth={6*s} strokeLinecap="round" />
-      {/* Pernas */}
-      <line x1={bx - 8*s} y1={by + 10*s} x2={bx - 15*s} y2={by + 50*s} stroke={PALETTE.pants} strokeWidth={8*s} strokeLinecap="round" />
-      <line x1={bx + 8*s} y1={by + 10*s} x2={bx + 15*s} y2={by + 50*s} stroke={PALETTE.pants} strokeWidth={8*s} strokeLinecap="round" />
-      {/* Pés */}
-      <ellipse cx={bx - 15*s} cy={by + 55*s} rx={8*s} ry={4*s} fill={PALETTE.shoes} />
-      <ellipse cx={bx + 15*s} cy={by + 55*s} rx={8*s} ry={4*s} fill={PALETTE.shoes} />
-    </g>
-  );
-};
+    case 'extensao-pernas-001':
+      return (
+        <g>
+          <MachineBase x={50} y={130} w={100} h={40} />
+          <MachinePad x={70} y={115} w={60} h={15} />
+          <Head cx={100} cy={95} />
+          <Torso x1={100} y1={110} x2={100} y2={135} w={22} />
+          <Leg x1={85} y1={135} x2={85} y2={75} w={16} />
+          <Leg x1={115} y1={135} x2={115} y2={75} w={16} />
+          <Foot cx={85} cy={70} rx={14} ry={6} />
+          <Foot cx={115} cy={70} rx={14} ry={6} />
+          <Arrow x1={70} y1={55} x2={70} y2={85} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>EXTENSÃO PERNAS</text>
+        </g>
+      );
 
-const LegPressIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    {/* Base da máquina */}
-    <rect x="40" y="140" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="145" width="100" height="30" rx="4" fill={PALETTE.machine} />
-    {/* Encosto */}
-    <rect x="60" y="80" width="80" height="60" rx="8" fill={PALETTE.machineLight} />
-    <rect x="70" y="90" width="60" height="40" rx="4" fill={PALETTE.accent} />
-    {/* Pernas empurrando */}
-    <line x1="80" y1="110" x2="80" y2="70" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="120" y1="110" x2="120" y2="70" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Pés na plataforma */}
-    <rect x="65" y="55" width="30" height="15" rx="4" fill={PALETTE.shoes} />
-    <rect x="105" y="55" width="30" height="15" rx="4" fill={PALETTE.shoes} />
-    {/* Plataforma */}
-    <rect x="55" y="45" width="90" height="10" rx="3" fill={PALETTE.machineDark} />
-    {/* Cabeça */}
-    <circle cx="100" cy="65" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    case 'flexao-pernas-001':
+      return (
+        <g>
+          <MachineBase x={50} y={130} w={100} h={40} />
+          <MachinePad x={70} y={115} w={60} h={15} />
+          <Head cx={100} cy={95} />
+          <Torso x1={100} y1={110} x2={100} y2={135} w={22} />
+          <Leg x1={85} y1={135} x2={85} y2={105} w={16} />
+          <Leg x1={115} y1={135} x2={115} y2={105} w={16} />
+          <Leg x1={85} y1={105} x2={70} y2={80} w={14} />
+          <Leg x1={115} y1={105} x2={130} y2={80} w={14} />
+          <Foot cx={70} cy={75} rx={14} ry={6} />
+          <Foot cx={130} cy={75} rx={14} ry={6} />
+          <Arrow x1={60} y1={70} x2={60} y2={110} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>FLEXÃO PERNAS</text>
+        </g>
+      );
 
-const LegExtensionIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="70" y="130" width="60" height="35" rx="8" fill={PALETTE.machineDark} />
-    <rect x="80" y="140" width="40" height="20" rx="4" fill={PALETTE.machine} />
-    {/* Pernas estendidas */}
-    <line x1="90" y1="130" x2="90" y2="70" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="110" y1="130" x2="110" y2="70" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Pés */}
-    <ellipse cx="90" cy="65" rx="10" ry="6" fill={PALETTE.shoes} />
-    <ellipse cx="110" cy="65" rx="10" ry="6" fill={PALETTE.shoes} />
-    {/* Peso */}
-    <rect x="75" y="50" width="50" height="12" rx="3" fill={PALETTE.machineDark} />
-  </svg>
-);
+    case 'adutores-001':
+      return (
+        <g>
+          <MachineBase x={40} y={120} w={60} h={40} />
+          <MachineBase x={100} y={120} w={60} h={40} />
+          <MachinePad x={50} y={105} w={40} h={15} />
+          <MachinePad x={110} y={105} w={40} h={15} />
+          <Head cx={100} cy={90} />
+          <Torso x1={100} y1={105} x2={100} y2={125} w={22} />
+          <Leg x1={85} y1={125} x2={85} y2={105} w={16} />
+          <Leg x1={115} y1={125} x2={115} y2={105} w={16} />
+          <Arrow x1={75} y1={100} x2={90} y2={100} />
+          <Arrow x1={125} y1={100} x2={110} y2={100} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ADUTORES</text>
+        </g>
+      );
 
-const LegCurlIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="70" y="130" width="60" height="35" rx="8" fill={PALETTE.machineDark} />
-    <rect x="80" y="140" width="40" height="20" rx="4" fill={PALETTE.machine} />
-    {/* Pernas deitadas, dobradas */}
-    <line x1="90" y1="130" x2="90" y2="100" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="110" y1="130" x2="110" y2="100" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="90" y1="100" x2="75" y2="80" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="110" y1="100" x2="125" y2="80" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Pés */}
-    <ellipse cx="75" cy="75" rx="10" ry="6" fill={PALETTE.shoes} />
-    <ellipse cx="125" cy="75" rx="10" ry="6" fill={PALETTE.shoes} />
-  </svg>
-);
+    case 'abducoes-001':
+      return (
+        <g>
+          <MachineBase x={40} y={120} w={60} h={40} />
+          <MachineBase x={100} y={120} w={60} h={40} />
+          <MachinePad x={50} y={105} w={40} h={15} />
+          <MachinePad x={110} y={105} w={40} h={15} />
+          <Head cx={100} cy={90} />
+          <Torso x1={100} y1={105} x2={100} y2={125} w={22} />
+          <Leg x1={85} y1={125} x2={70} y2={105} w={16} />
+          <Leg x1={115} y1={125} x2={130} y2={105} w={16} />
+          <Arrow x1={65} y1={100} x2={80} y2={100} />
+          <Arrow x1={135} y1={100} x2={120} y2={100} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ABDUÇÕES</text>
+        </g>
+      );
 
-const AdductorIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="50" y="100" width="40" height="50" rx="8" fill={PALETTE.machineDark} />
-    <rect x="110" y="100" width="40" height="50" rx="8" fill={PALETTE.machineDark} />
-    <rect x="60" y="110" width="20" height="30" rx="4" fill={PALETTE.machine} />
-    <rect x="120" y="110" width="20" height="30" rx="4" fill={PALETTE.machine} />
-    {/* Pernas fechando */}
-    <line x1="80" y1="125" x2="100" y2="125" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="120" y1="125" x2="100" y2="125" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-  </svg>
-);
+    case 'panturrilha-001':
+      return (
+        <g>
+          <MachineBase x={50} y={130} w={100} h={40} />
+          <MachinePad x={70} y={115} w={60} h={15} />
+          <rect x={60} y={70} width={80} height={10} rx={3} fill={C.machineDark} />
+          <Head cx={100} cy={55} />
+          <Torso x1={100} y1={70} x2={100} y2={115} w={22} />
+          <Leg x1={85} y1={115} x2={85} y2={55} w={16} />
+          <Leg x1={115} y1={115} x2={115} y2={55} w={16} />
+          <Foot cx={85} cy={50} rx={14} ry={6} />
+          <Foot cx={115} cy={50} rx={14} ry={6} />
+          <Arrow x1={70} y1={40} x2={70} y2={70} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PANTURRILHA</text>
+        </g>
+      );
 
-const AbductorIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="50" y="100" width="40" height="50" rx="8" fill={PALETTE.machineDark} />
-    <rect x="110" y="100" width="40" height="50" rx="8" fill={PALETTE.machineDark} />
-    <rect x="60" y="110" width="20" height="30" rx="4" fill={PALETTE.machine} />
-    <rect x="120" y="110" width="20" height="30" rx="4" fill={PALETTE.machine} />
-    {/* Pernas abrindo */}
-    <line x1="80" y1="125" x2="70" y2="125" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="120" y1="125" x2="130" y2="125" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <path d="M70 125 L100 125 M130 125 L100 125" stroke={PALETTE.accent} strokeWidth="4" strokeLinecap="round" />
-  </svg>
-);
+    case 'agachamento-goblet-001':
+      return (
+        <g>
+          <Head cx={100} cy={70} />
+          <Torso x1={100} y1={85} x2={100} y2={130} w={22} />
+          <Arm x1={85} y1={90} x2={85} y2={120} w={10} />
+          <Arm x1={115} y1={90} x2={115} y2={120} w={10} />
+          <circle cx={100} cy={120} r={12} fill={C.machineDark} />
+          <Leg x1={85} y1={130} x2={70} y2={165} w={16} />
+          <Leg x1={115} y1={130} x2={130} y2={165} w={16} />
+          <Foot cx={70} cy={165} rx={14} ry={6} />
+          <Foot cx={130} cy={165} rx={14} ry={6} />
+          <Arrow x1={55} y1={140} x2={55} y2={100} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>GOBLET SQUAT</text>
+        </g>
+      );
 
-const CalfRaiseIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="70" y="130" width="60" height="35" rx="8" fill={PALETTE.machineDark} />
-    <rect x="80" y="140" width="40" height="20" rx="4" fill={PALETTE.machine} />
-    {/* Pernas em pé */}
-    <line x1="90" y1="130" x2="90" y2="60" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="110" y1="130" x2="110" y2="60" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Pés em ponta */}
-    <ellipse cx="90" cy="55" rx="12" ry="8" fill={PALETTE.shoes} />
-    <ellipse cx="110" cy="55" rx="12" ry="8" fill={PALETTE.shoes} />
-    {/* Peso nos ombros */}
-    <rect x="70" y="45" width="60" height="10" rx="3" fill={PALETTE.machineDark} />
-  </svg>
-);
+    case 'step-up-001':
+      return (
+        <g>
+          <Bench x={120} y={140} w={60} h={20} />
+          <Head cx={100} cy={80} />
+          <Torso x1={100} y1={95} x2={100} y2={130} w={22} />
+          <Arm x1={85} y1={100} x2={70} y2={120} w={10} />
+          <Arm x1={115} y1={100} x2={130} y2={120} w={10} />
+          <circle cx={70} cy={120} r={8} fill={C.machineDark} />
+          <circle cx={130} cy={120} r={8} fill={C.machineDark} />
+          <Leg x1={95} y1={130} x2={95} y2={140} w={16} />
+          <Leg x1={105} y1={130} x2={105} y2={160} w={16} />
+          <Foot cx={95} cy={140} rx={14} ry={6} />
+          <Foot cx={105} cy={165} rx={14} ry={6} />
+          <Arrow x1={80} y1={110} x2={80} y2={80} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>STEP UP</text>
+        </g>
+      );
 
-const LatPulldownIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="85" y="20" width="30" height="40" rx="4" fill={PALETTE.machineDark} />
-    <rect x="70" y="60" width="60" height="50" rx="8" fill={PALETTE.machine} />
-    <rect x="80" y="70" width="40" height="30" rx="4" fill={PALETTE.accent} />
-    {/* Cabeça */}
-    <circle cx="100" cy="55" r="14" fill={PALETTE.skin} />
-    {/* Braços puxando */}
-    <line x1="85" y1="65" x2="70" y2="85" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="115" y1="65" x2="130" y2="85" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    {/* Barra */}
-    <rect x="60" y="80" width="80" height="8" rx="3" fill={PALETTE.machineDark} />
-  </svg>
-);
+    // ===================== COSTAS =====================
+    case 'puxada-frontal-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={40} y1={80} x2={160} y2={80} w={8} />
+          <Head cx={100} cy={95} />
+          <Torso x1={100} y1={110} x2={100} y2={145} w={22} />
+          <Arm x1={85} y1={115} x2={55} y2={85} w={10} />
+          <Arm x1={115} y1={115} x2={145} y2={85} w={10} />
+          <Leg x1={85} y1={145} x2={85} y2={170} w={16} />
+          <Leg x1={115} y1={145} x2={115} y2={170} w={16} />
+          <Foot cx={85} cy={170} rx={14} ry={6} />
+          <Foot cx={115} cy={170} rx={14} ry={6} />
+          <Arrow x1={50} y1={95} x2={50} y2={75} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PUXADA FRONTAL</text>
+        </g>
+      );
 
-const SeatedRowIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="120" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="130" width="100" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="70" y="60" width="60" height="60" rx="8" fill={PALETTE.machineLight} />
-    <rect x="80" y="70" width="40" height="40" rx="4" fill={PALETTE.accent} />
-    {/* Cabeça */}
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-    {/* Braços puxando */}
-    <line x1="75" y1="80" x2="55" y2="110" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="125" y1="80" x2="145" y2="110" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'remada-sentada-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={110} x2={50} y2={110} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={110} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={100} x2={35} y2={120} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>REMADA SENTADA</text>
+        </g>
+      );
 
-const FacePullIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="85" y="20" width="30" height="40" rx="4" fill={PALETTE.machineDark} />
-    <rect x="70" y="60" width="60" height="50" rx="8" fill={PALETTE.machine} />
-    <rect x="80" y="70" width="40" height="30" rx="4" fill={PALETTE.accent} />
-    <circle cx="100" cy="55" r="14" fill={PALETTE.skin} />
-    {/* Braços para trás */}
-    <line x1="85" y1="65" x2="60" y2="90" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="115" y1="65" x2="140" y2="90" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'remada-unilateral-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={110} x2={50} y2={110} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={110} w={10} />
+          <Arm x1={115} y1={95} x2={115} y2={130} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={100} x2={35} y2={120} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>REMADA 1 BRAÇO</text>
+        </g>
+      );
 
-const HyperextensionIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="130" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="140" width="100" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="70" y="80" width="60" height="50" rx="8" fill={PALETTE.machineLight} />
-    <rect x="80" y="90" width="40" height="30" rx="4" fill={PALETTE.accent} />
-    {/* Corpo inclinado */}
-    <line x1="100" y1="80" x2="100" y2="45" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <circle cx="100" cy="35" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="80" x2="85" y2="130" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="80" x2="115" y2="130" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-  </svg>
-);
+    case 'pullover-001':
+      return (
+        <g>
+          <Bench x={50} y={130} w={100} h={25} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={120} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={75} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={75} w={10} />
+          <circle cx={55} cy={75} r={10} fill={C.machineDark} />
+          <circle cx={145} cy={75} r={10} fill={C.machineDark} />
+          <Leg x1={90} y1={120} x2={90} y2={155} w={14} />
+          <Leg x1={110} y1={120} x2={110} y2={155} w={14} />
+          <Foot cx={90} cy={155} rx={12} ry={5} />
+          <Foot cx={110} cy={155} rx={12} ry={5} />
+          <Arrow x1={45} y1={65} x2={45} y2={95} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PULLOVER</text>
+        </g>
+      );
 
-const PulloverIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="130" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="140" width="100" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="70" y="60" width="60" height="70" rx="8" fill={PALETTE.machineLight} />
-    <rect x="80" y="70" width="40" height="50" rx="4" fill={PALETTE.accent} />
-    {/* Braços estendidos */}
-    <line x1="75" y1="80" x2="50" y2="60" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="125" y1="80" x2="150" y2="60" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    case 'face-pull-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={100} y1={60} x2={100} y2={100} w={4} />
+          <Head cx={100} cy={115} r={12} />
+          <Torso x1={100} y1={130} x2={100} y2={155} w={20} />
+          <Arm x1={85} y1={135} x2={70} y2={110} w={10} />
+          <Arm x1={115} y1={135} x2={130} y2={110} w={10} />
+          <circle cx={70} cy={110} r={6} fill={C.machineDark} />
+          <circle cx={130} cy={110} r={6} fill={C.machineDark} />
+          <Leg x1={90} y1={155} x2={90} y2={170} w={14} />
+          <Leg x1={110} y1={155} x2={110} y2={170} w={14} />
+          <Foot cx={90} cy={170} rx={12} ry={5} />
+          <Foot cx={110} cy={170} rx={12} ry={5} />
+          <Arrow x1={60} y1={105} x2={60} y2={125} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>FACE PULL</text>
+        </g>
+      );
 
-const ChestPressIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="130" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="140" width="100" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="70" y="60" width="60" height="70" rx="8" fill={PALETTE.machineLight} />
-    <rect x="80" y="70" width="40" height="50" rx="4" fill={PALETTE.accent} />
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-    {/* Braços empurrando */}
-    <line x1="75" y1="80" x2="55" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="125" y1="80" x2="145" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'hyperextension-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <MachinePad x={50} y={85} w={20} h={20} rx={4} />
+          <Head cx={70} cy={55} r={12} />
+          <Torso x1={70} y1={70} x2={70} y2={95} w={20} />
+          <Arm x1={60} y1={75} x2={50} y2={85} w={10} />
+          <Arm x1={80} y1={75} x2={90} y2={85} w={10} />
+          <Leg x1={70} y1={95} x2={90} y2={120} w={14} />
+          <Leg x1={70} y1={95} x2={50} y2={120} w={14} />
+          <Foot cx={90} cy={120} rx={12} ry={5} />
+          <Foot cx={50} cy={120} rx={12} ry={5} />
+          <Arrow x1={85} y1={50} x2={85} y2={70} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>HIPEREXTENSÃO</text>
+        </g>
+      );
 
-const InclinePressIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="130" width="120" height="40" rx="8" fill={PALETTE.machineDark} transform="rotate(-10 100 130)" />
-    <rect x="50" y="140" width="100" height="25" rx="4" fill={PALETTE.machine} transform="rotate(-10 100 130)" />
-    <rect x="70" y="60" width="60" height="70" rx="8" fill={PALETTE.machineLight} transform="rotate(-10 100 60)" />
-    <rect x="80" y="70" width="40" height="50" rx="4" fill={PALETTE.accent} transform="rotate(-10 100 70)" />
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-    <line x1="75" y1="80" x2="55" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="125" y1="80" x2="145" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    // ===================== PEITO =====================
+    case 'peito-maquina-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={110} x2={50} y2={110} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={110} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={100} x2={35} y2={120} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PEITO MÁQUINA</text>
+        </g>
+      );
 
-const CrossoverIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="30" y="20" width="20" height="80" rx="4" fill={PALETTE.machineDark} />
-    <rect x="150" y="20" width="20" height="80" rx="4" fill={PALETTE.machineDark} />
-    <circle cx="100" cy="140" r="14" fill={PALETTE.skin} />
-    {/* Braços cruzados */}
-    <line x1="40" y1="100" x2="70" y2="130" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="160" y1="100" x2="130" y2="130" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'peito-inclinado-001':
+      return (
+        <g>
+          <MachineBase x={50} y={125} w={100} h={35} />
+          <MachinePad x={70} y={110} w={60} h={15} />
+          <Bar x1={30} y1={100} x2={50} y2={100} w={8} />
+          <Head cx={100} cy={65} r={12} />
+          <Torso x1={100} y1={80} x2={100} y2={100} w={20} />
+          <Arm x1={85} y1={85} x2={55} y2={100} w={10} />
+          <Arm x1={115} y1={85} x2={145} y2={100} w={10} />
+          <Leg x1={90} y1={100} x2={90} y2={135} w={14} />
+          <Leg x1={110} y1={100} x2={110} y2={135} w={14} />
+          <Foot cx={90} cy={135} rx={12} ry={5} />
+          <Foot cx={110} cy={135} rx={12} ry={5} />
+          <Arrow x1={35} y1={90} x2={35} y2={110} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PEITO INCLINADO</text>
+        </g>
+      );
 
-const PecDeckIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="40" y="130" width="120" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="50" y="140" width="100" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="70" y="60" width="60" height="70" rx="8" fill={PALETTE.machineLight} />
-    <rect x="80" y="70" width="40" height="50" rx="4" fill={PALETTE.accent} />
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-    {/* Braços abertos */}
-    <line x1="75" y1="80" x2="50" y2="60" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="125" y1="80" x2="150" y2="60" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'crossover-001':
+      return (
+        <g>
+          <MachineBase x={30} y={20} w={20} h={60} />
+          <MachineBase x={150} y={20} w={20} h={60} />
+          <Bar x1={40} y1={80} x2={70} y2={130} w={4} />
+          <Bar x1={160} y1={80} x2={130} y2={130} w={4} />
+          <Head cx={100} cy={150} r={12} />
+          <Torso x1={100} y1={165} x2={100} y2={185} w={20} />
+          <Arm x1={85} y1={170} x2={70} y2={130} w={10} />
+          <Arm x1={115} y1={170} x2={130} y2={130} w={10} />
+          <Leg x1={90} y1={185} x2={90} y2={200} w={14} />
+          <Leg x1={110} y1={185} x2={110} y2={200} w={14} />
+          <Arrow x1={75} y1={125} x2={85} y2={145} />
+          <Arrow x1={125} y1={125} x2={115} y2={145} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>CROSSOVER</text>
+        </g>
+      );
 
-const PushUpIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    {/* Corpo em prancha */}
-    <line x1="100" y1="60" x2="100" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <circle cx="100" cy="50" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="110" x2="70" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="130" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Braços */}
-    <line x1="100" y1="80" x2="70" y2="120" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="100" y1="80" x2="130" y2="120" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'peck-deck-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={110} x2={50} y2={110} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={110} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={100} x2={35} y2={120} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PECK DECK</text>
+        </g>
+      );
 
-const BicepCurlIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="50" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="65" x2="100" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="70" y2="140" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    {/* Barra */}
-    <rect x="55" y="135" width="30" height="10" rx="4" fill={PALETTE.machineDark} />
-    <rect x="50" y="130" width="8" height="20" rx="3" fill={PALETTE.machineDark} />
-  </svg>
-);
+    case 'flexoes-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={75} x2={70} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={130} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={155} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={155} w={14} />
+          <Foot cx={90} cy={155} rx={12} ry={5} />
+          <Foot cx={110} cy={155} rx={12} ry={5} />
+          <Arrow x1={60} y1={95} x2={60} y2={70} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>FLEXÕES</text>
+        </g>
+      );
 
-const DumbbellCurlIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="50" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="65" x2="100" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="70" y2="140" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    {/* Haltere */}
-    <rect x="50" y="130" width="40" height="12" rx="4" fill={PALETTE.machineDark} />
-    <rect x="45" y="125" width="10" height="22" rx="3" fill={PALETTE.machineDark} />
-    <rect x="85" y="125" width="10" height="22" rx="3" fill={PALETTE.machineDark} />
-  </svg>
-);
+    // ===================== BRAÇOS =====================
+    case 'rosca-biceps-001':
+      return (
+        <g>
+          <MachineBase x={70} y={120} w={60} h={40} />
+          <MachinePad x={80} y={105} w={40} h={15} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={85} y2={65} w={10} />
+          <Arm x1={115} y1={95} x2={115} y2={65} w={10} />
+          <Bar x1={70} y1={60} x2={130} y2={60} w={8} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={75} y1={50} x2={75} y2={75} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ROSCA BÍCEPS</text>
+        </g>
+      );
 
-const TricepRopeIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="85" y="20" width="30" height="40" rx="4" fill={PALETTE.machineDark} />
-    <line x1="100" y1="60" x2="100" y2="100" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <circle cx="100" cy="110" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="125" x2="70" y2="160" stroke={PALETTE.shirt} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="125" x2="130" y2="160" stroke={PALETTE.shirt} strokeWidth="12" strokeLinecap="round" />
-  </svg>
-);
+    case 'rosca-haltere-001':
+      return (
+        <g>
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={85} y2={65} w={10} />
+          <Arm x1={115} y1={95} x2={115} y2={65} w={10} />
+          <circle cx={85} cy={60} r={10} fill={C.machineDark} />
+          <circle cx={115} cy={60} r={10} fill={C.machineDark} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={75} y1={50} x2={75} y2={75} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ROSCA HALTERES</text>
+        </g>
+      );
 
-const TricepMachineIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="70" y="120" width="60" height="40" rx="8" fill={PALETTE.machineDark} />
-    <rect x="80" y="130" width="40" height="25" rx="4" fill={PALETTE.machine} />
-    <rect x="85" y="60" width="30" height="60" rx="8" fill={PALETTE.machineLight} />
-    <rect x="90" y="70" width="20" height="40" rx="4" fill={PALETTE.accent} />
-    <circle cx="100" cy="45" r="14" fill={PALETTE.skin} />
-    <line x1="85" y1="80" x2="65" y2="120" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="115" y1="80" x2="135" y2="120" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'triceps-corda-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={100} y1={60} x2={100} y2={90} w={4} />
+          <line x1={95} y1={95} x2={105} y2={95} stroke={C.machineDark} strokeWidth={4} />
+          <Head cx={100} cy={105} r={12} />
+          <Torso x1={100} y1={120} x2={100} y2={145} w={20} />
+          <Arm x1={85} y1={125} x2={85} y2={95} w={10} />
+          <Arm x1={115} y1={125} x2={115} y2={95} w={10} />
+          <Leg x1={90} y1={145} x2={90} y2={170} w={14} />
+          <Leg x1={110} y1={145} x2={110} y2={170} w={14} />
+          <Foot cx={90} cy={170} rx={12} ry={5} />
+          <Foot cx={110} cy={170} rx={12} ry={5} />
+          <Arrow x1={85} y1={90} x2={85} y2={115} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>TRÍCEPS CORDA</text>
+        </g>
+      );
 
-const HammerCurlIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="50" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="65" x2="100" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="70" y2="130" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <rect x="55" y="125" width="30" height="12" rx="4" fill={PALETTE.machineDark} />
-  </svg>
-);
+    case 'triceps-maquina-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={110} x2={50} y2={110} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={110} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={100} x2={35} y2={120} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>TRÍCEPS MÁQUINA</text>
+        </g>
+      );
 
-const TricepFrenchIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="50" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="65" x2="100" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="130" y2="140" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <rect x="125" y="135" width="30" height="12" rx="4" fill={PALETTE.machineDark} />
-  </svg>
-);
+    case 'triceps-frances-001':
+      return (
+        <g>
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={115} y2={75} w={10} />
+          <Arm x1={115} y1={95} x2={115} y2={75} w={10} />
+          <circle cx={115} cy={70} r={10} fill={C.machineDark} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={105} y1={65} x2={105} y2={90} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>TRÍCEPS FRANCÊS</text>
+        </g>
+      );
 
-const PlankIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    {/* Corpo em prancha */}
-    <line x1="60" y1="160" x2="70" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="70" y1="110" x2="130" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="130" y1="110" x2="140" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="70" cy="100" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    case 'rosca-martelo-001':
+      return (
+        <g>
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={85} y2={65} w={10} />
+          <Arm x1={115} y1={95} x2={115} y2={65} w={10} />
+          <circle cx={85} cy={60} r={10} fill={C.machineDark} />
+          <circle cx={115} cy={60} r={10} fill={C.machineDark} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={75} y1={50} x2={75} y2={75} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ROSCA MARTELO</text>
+        </g>
+      );
 
-const BridgeIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <line x1="60" y1="160" x2="70" y2="110" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="70" y1="110" x2="130" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="130" y1="110" x2="140" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="100" cy="100" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    // ===================== OMBROS =====================
+    case 'elevacao-lateral-001':
+      return (
+        <g>
+          <MachineBase x={70} y={120} w={60} h={40} />
+          <MachinePad x={80} y={105} w={40} h={15} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={70} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={70} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={50} y1={65} x2={50} y2={90} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ELEVAÇÃO LATERAL</text>
+        </g>
+      );
 
-const BirdDogIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <line x1="60" y1="160" x2="70" y2="110" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="70" y1="110" x2="130" y2="105" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="130" y1="105" x2="140" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="70" cy="100" r="14" fill={PALETTE.skin} />
-    {/* Braço e perna estendidos */}
-    <line x1="70" y1="110" x2="45" y2="85" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="130" y1="105" x2="155" y2="80" stroke={PALETTE.pants} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'elevacao-lateral-haltere-001':
+      return (
+        <g>
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={70} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={70} w={10} />
+          <circle cx={55} cy={65} r={10} fill={C.machineDark} />
+          <circle cx={145} cy={65} r={10} fill={C.machineDark} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={50} y1={65} x2={50} y2={90} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ELEVAÇÃO HALTERES</text>
+        </g>
+      );
 
-const DeadBugIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <circle cx="100" cy="100" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="86" x2="100" y2="60" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="114" x2="100" y2="140" stroke={PALETTE.pants} strokeWidth="16" strokeLinecap="round" />
-    <line x1="86" y1="100" x2="60" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-    <line x1="114" y1="100" x2="140" y2="100" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'desenvolvimento-ombros-001':
+      return (
+        <g>
+          <MachineBase x={50} y={120} w={100} h={40} />
+          <MachinePad x={70} y={105} w={60} h={15} />
+          <Bar x1={30} y1={60} x2={50} y2={60} w={8} />
+          <Head cx={100} cy={75} r={12} />
+          <Torso x1={100} y1={90} x2={100} y2={110} w={20} />
+          <Arm x1={85} y1={95} x2={55} y2={60} w={10} />
+          <Arm x1={115} y1={95} x2={145} y2={60} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={145} w={14} />
+          <Foot cx={90} cy={145} rx={12} ry={5} />
+          <Foot cx={110} cy={145} rx={12} ry={5} />
+          <Arrow x1={35} y1={50} x2={35} y2={80} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>DESENV. OMBROS</text>
+        </g>
+      );
 
-const StomachVacuumIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="80" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="95" x2="100" y2="140" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="140" x2="85" y2="170" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="140" x2="115" y2="170" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    {/* Abdômen contraído */}
-    <ellipse cx="100" cy="120" rx="20" ry="12" fill="none" stroke={PALETTE.shirtDark} strokeWidth="3" />
-    <ellipse cx="100" cy="120" rx="12" ry="8" fill="none" stroke={PALETTE.shirtDark} strokeWidth="2" strokeDasharray="4 2" />
-  </svg>
-);
+    case 'elevacao-frontal-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={100} y1={60} x2={100} y2={90} w={4} />
+          <Head cx={100} cy={105} r={12} />
+          <Torso x1={100} y1={120} x2={100} y2={145} w={20} />
+          <Arm x1={85} y1={125} x2={85} y2={95} w={10} />
+          <Arm x1={115} y1={125} x2={115} y2={95} w={10} />
+          <circle cx={85} cy={90} r={6} fill={C.machineDark} />
+          <circle cx={115} cy={90} r={6} fill={C.machineDark} />
+          <Leg x1={90} y1={145} x2={90} y2={170} w={14} />
+          <Leg x1={110} y1={145} x2={110} y2={170} w={14} />
+          <Foot cx={90} cy={170} rx={12} ry={5} />
+          <Foot cx={110} cy={170} rx={12} ry={5} />
+          <Arrow x1={75} y1={85} x2={75} y2={110} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ELEVAÇÃO FRONTAL</text>
+        </g>
+      );
 
-const SidePlankIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <line x1="60" y1="160" x2="60" y2="110" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="60" y1="110" x2="130" y2="110" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="130" y1="110" x2="130" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="60" cy="100" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    // ===================== CORE =====================
+    case 'prancha-001':
+      return (
+        <g>
+          <Head cx={70} cy={95} r={12} />
+          <Torso x1={70} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={60} y1={115} x2={50} y2={110} w={10} />
+          <Arm x1={80} y1={115} x2={90} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Foot cx={130} cy={110} rx={12} ry={5} />
+          <rect x={45} y={120} width={90} height={5} rx={2} fill={C.green} opacity={0.7} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PRANCHA</text>
+        </g>
+      );
 
-const PallofPressIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <rect x="85" y="20" width="30" height="40" rx="4" fill={PALETTE.machineDark} />
-    <circle cx="100" cy="80" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="95" x2="100" y2="140" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" />
-    <line x1="100" y1="140" x2="70" y2="170" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="140" x2="130" y2="170" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="110" x2="130" y2="110" stroke={PALETTE.skin} strokeWidth="8" strokeLinecap="round" />
-  </svg>
-);
+    case 'prancha-lateral-001':
+      return (
+        <g>
+          <Head cx={60} cy={95} r={12} />
+          <Torso x1={60} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={50} y1={115} x2={40} y2={110} w={10} />
+          <Arm x1={70} y1={115} x2={80} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Foot cx={130} cy={110} rx={12} ry={5} />
+          <rect x={35} y={120} width={90} height={5} rx={2} fill={C.green} opacity={0.7} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PRANCHA LATERAL</text>
+        </g>
+      );
 
-const HipRotationIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="100" r="40" fill="none" stroke={PALETTE.machineDark} strokeWidth="3" />
-    <circle cx="100" cy="100" r="15" fill={PALETTE.shirt} />
-    <circle cx="100" cy="100" r="8" fill={PALETTE.accent} />
-    <path d="M100 60 L100 75 M100 125 L100 140 M60 100 L75 100 M125 100 L140 100" stroke={PALETTE.machineDark} strokeWidth="2" strokeLinecap="round" />
-  </svg>
-);
+    case 'bird-dog-001':
+      return (
+        <g>
+          <Head cx={70} cy={95} r={12} />
+          <Torso x1={70} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={60} y1={115} x2={45} y2={85} w={10} />
+          <Arm x1={80} y1={115} x2={95} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Foot cx={130} cy={110} rx={12} ry={5} />
+          <Arrow x1={40} y1={80} x2={40} y2={60} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>BIRD DOG</text>
+        </g>
+      );
 
-const AnkleOpenIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="100" r="30" fill="none" stroke={PALETTE.machineDark} strokeWidth="3" />
-    <path d="M100 70 L100 130" stroke={PALETTE.machineDark} strokeWidth="3" strokeLinecap="round" />
-    <path d="M70 100 L100 100 M100 100 L130 100" stroke={PALETTE.machineDark} strokeWidth="2" strokeLinecap="round" />
-    <circle cx="100" cy="100" r="8" fill={PALETTE.shirt} />
-  </svg>
-);
+    case 'bridge-001':
+      return (
+        <g>
+          <Head cx={70} cy={55} r={12} />
+          <Torso x1={70} y1={70} x2={70} y2={100} w={20} />
+          <Arm x1={60} y1={75} x2={50} y2={90} w={10} />
+          <Arm x1={80} y1={75} x2={90} y2={90} w={10} />
+          <Leg x1={70} y1={100} x2={100} y2={100} w={14} />
+          <Leg x1={70} y1={100} x2={100} y2={100} w={14} />
+          <Leg x1={100} y1={100} x2={130} y2={130} w={14} />
+          <Foot cx={130} cy={130} rx={12} ry={5} />
+          <Arrow x1={85} y1={85} x2={85} y2={65} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>BRIDGE</text>
+        </g>
+      );
 
-const ThoracicRotationIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="60" y1="60" x2="140" y2="60" stroke={PALETTE.machineDark} strokeWidth="3" strokeLinecap="round" />
-    <line x1="100" y1="60" x2="100" y2="140" stroke={PALETTE.machineDark} strokeWidth="3" strokeLinecap="round" />
-    <path d="M100 140 L70 110 M100 140 L130 110" stroke={PALETTE.machineDark} strokeWidth="3" strokeLinecap="round" />
-    <circle cx="100" cy="100" r="12" fill={PALETTE.shirt} />
-  </svg>
-);
+    case 'vacuo-abdominal-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={150} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={150} w={14} />
+          <Foot cx={90} cy={150} rx={12} ry={5} />
+          <Foot cx={110} cy={150} rx={12} ry={5} />
+          <ellipse cx={100} cy={95} rx={20} ry={12} fill="none" stroke={C.red} strokeWidth={3} strokeDasharray="5 3" />
+          <ellipse cx={100} cy={95} rx={12} ry={8} fill="none" stroke={C.red} strokeWidth={2} strokeDasharray="3 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>VÁCUO ABDOMINAL</text>
+        </g>
+      );
 
-const CatCowIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <path d="M40 130 Q100 80 160 130" stroke={PALETTE.shirt} strokeWidth="16" strokeLinecap="round" fill="none" />
-    <path d="M40 145 Q100 170 160 145" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" fill="none" />
-    <circle cx="100" cy="95" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    case 'dead-bug-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={90} w={22} />
+          <Arm x1={85} y1={75} x2={65} y2={55} w={10} />
+          <Arm x1={115} y1={75} x2={135} y2={55} w={10} />
+          <Leg x1={85} y1={90} x2={65} y2={110} w={14} />
+          <Leg x1={115} y1={90} x2={135} y2={110} w={14} />
+          <ellipse cx={100} cy={85} rx={18} ry={10} fill="none" stroke={C.green} strokeWidth={2} strokeDasharray="4 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>DEAD BUG</text>
+        </g>
+      );
 
-const Hip9090Illustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="20" y1="160" x2="180" y2="160" stroke={PALETTE.machineDark} strokeWidth="4" strokeLinecap="round" />
-    <line x1="70" y1="160" x2="70" y2="120" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="70" y1="120" x2="100" y2="120" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="100" y1="120" x2="100" y2="160" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="130" y1="160" x2="130" y2="120" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <line x1="130" y1="120" x2="100" y2="120" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="100" cy="110" r="14" fill={PALETTE.skin} />
-  </svg>
-);
+    case 'pallof-press-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={100} y1={60} x2={100} y2={100} w={4} />
+          <Head cx={100} cy={115} r={12} />
+          <Torso x1={100} y1={130} x2={100} y2={155} w={20} />
+          <Arm x1={85} y1={135} x2={100} y2={100} w={10} />
+          <Arm x1={115} y1={135} x2={100} y2={100} w={10} />
+          <circle cx={100} cy={100} r={6} fill={C.machineDark} />
+          <Leg x1={90} y1={155} x2={90} y2={170} w={14} />
+          <Leg x1={110} y1={155} x2={110} y2={170} w={14} />
+          <Foot cx={90} cy={170} rx={12} ry={5} />
+          <Foot cx={110} cy={170} rx={12} ry={5} />
+          <Arrow x1={85} y1={95} x2={85} y2={115} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>PALLOF PRESS</text>
+        </g>
+      );
 
-const BalanceIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <line x1="100" y1="160" x2="100" y2="100" stroke={PALETTE.pants} strokeWidth="12" strokeLinecap="round" />
-    <circle cx="100" cy="90" r="14" fill={PALETTE.skin} />
-    <line x1="100" y1="100" x2="130" y2="70" stroke={PALETTE.shirt} strokeWidth="8" strokeLinecap="round" />
-    <line x1="100" y1="100" x2="70" y2="105" stroke={PALETTE.shirt} strokeWidth="8" strokeLinecap="round" />
-    {/* Linha de equilíbrio */}
-    <ellipse cx="100" cy="165" rx="20" ry="5" fill="none" stroke={PALETTE.machineDark} strokeWidth="2" />
-  </svg>
-);
+    // ===================== MOBILIDADE =====================
+    case 'rotacao-quadril-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={150} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={150} w={14} />
+          <Foot cx={90} cy={150} rx={12} ry={5} />
+          <Foot cx={110} cy={150} rx={12} ry={5} />
+          <circle cx={100} cy={110} r={30} fill="none" stroke={C.accent} strokeWidth={3} strokeDasharray="8 4" />
+          <Arrow x1={75} y1={90} x2={85} y2={100} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ROTAÇÃO QUADRIL</text>
+        </g>
+      );
 
-const ShoulderMobilityIllustration: React.FC<{ size: number }> = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 200 200">
-    <rect fill={PALETTE.bg} width="200" height="200" rx="12" />
-    <circle cx="100" cy="100" r="35" fill="none" stroke={PALETTE.machineDark} strokeWidth="3" />
-    <path d="M100 65 L100 50 M100 135 L100 150 M65 100 L50 100 M135 100 L150 100" stroke={PALETTE.machineDark} strokeWidth="2" strokeLinecap="round" />
-    <circle cx="100" cy="100" r="10" fill={PALETTE.shirt} />
-  </svg>
-);
+    case 'abertura-tornozelo-001':
+      return (
+        <g>
+          <rect x={20} y={40} width={30} height={120} rx={4} fill={C.machineDark} />
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={90} y2={150} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={150} w={14} />
+          <Foot cx={90} cy={150} rx={12} ry={5} />
+          <Foot cx={110} cy={150} rx={12} ry={5} />
+          <line x1={75} y1={140} x2={55} y2={140} stroke={C.accent} strokeWidth={4} strokeLinecap="round" />
+          <Arrow x1={70} y1={130} x2={60} y2={140} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>TORNOZELO</text>
+        </g>
+      );
+
+    case 'mobilidade-ombros-001':
+      return (
+        <g>
+          <MachineBase x={80} y={20} w={40} h={40} />
+          <Bar x1={100} y1={60} x2={100} y2={90} w={4} />
+          <Head cx={100} cy={105} r={12} />
+          <Torso x1={100} y1={120} x2={100} y2={145} w={20} />
+          <Arm x1={85} y1={125} x2={85} y2={90} w={10} />
+          <Arm x1={115} y1={125} x2={115} y2={130} w={10} />
+          <circle cx={85} cy={85} r={6} fill={C.machineDark} />
+          <circle cx={115} cy={100} r={25} fill="none" stroke={C.accent} strokeWidth={3} strokeDasharray="8 4" />
+          <Leg x1={90} y1={145} x2={90} y2={170} w={14} />
+          <Leg x1={110} y1={145} x2={110} y2={170} w={14} />
+          <Foot cx={90} cy={170} rx={12} ry={5} />
+          <Foot cx={110} cy={170} rx={12} ry={5} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>MOBILIDADE OMBROS</text>
+        </g>
+      );
+
+    case 'thoracic-rotation-001':
+      return (
+        <g>
+          <Head cx={70} cy={95} r={12} />
+          <Torso x1={70} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={60} y1={115} x2={50} y2={110} w={10} />
+          <Arm x1={80} y1={115} x2={90} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Foot cx={130} cy={110} rx={12} ry={5} />
+          <line x1={60} y1={100} x2={80} y2={80} stroke={C.accent} strokeWidth={4} strokeLinecap="round" />
+          <Arrow x1={75} y1={85} x2={85} y2={75} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>ROTAÇÃO TORÁCICA</text>
+        </g>
+      );
+
+    case 'cat-cow-001':
+      return (
+        <g>
+          <path d="M40 130 Q100 80 160 130" stroke={C.shirt} strokeWidth={18} strokeLinecap="round" fill="none" />
+          <path d="M40 145 Q100 170 160 145" stroke={C.pants} strokeWidth={14} strokeLinecap="round" fill="none" />
+          <Head cx={100} cy={95} r={12} />
+          <Arrow x1={85} y1={85} x2={85} y2={70} />
+          <Arrow x1={115} y1={70} x2={115} y2={85} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>CAT-COW</text>
+        </g>
+      );
+
+    case '9090-hip-001':
+      return (
+        <g>
+          <Head cx={70} cy={95} r={12} />
+          <Torso x1={70} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={60} y1={115} x2={50} y2={110} w={10} />
+          <Arm x1={80} y1={115} x2={90} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={120} y2={110} w={14} />
+          <Leg x1={120} y1={110} x2={130} y2={130} w={14} />
+          <Leg x1={100} y1={110} x2={110} y2={130} w={14} />
+          <Foot cx={130} cy={130} rx={12} ry={5} />
+          <Foot cx={110} cy={130} rx={12} ry={5} />
+          <rect x={85} y={105} width={20} height={20} rx={3} fill="none" stroke={C.accent} strokeWidth={2} strokeDasharray="4 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>90-90 HIP</text>
+        </g>
+      );
+
+    case 'single-leg-balance-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={100} y2={150} w={14} />
+          <Leg x1={100} y1={110} x2={120} y2={90} w={14} />
+          <Foot cx={100} cy={150} rx={12} ry={5} />
+          <Foot cx={120} cy={90} rx={12} ry={5} />
+          <ellipse cx={100} cy={155} rx={25} ry={6} fill="none" stroke={C.green} strokeWidth={2} strokeDasharray="4 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>EQUILÍBRIO 1 PERNA</text>
+        </g>
+      );
+
+    case 'shoulder-dislocates-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={55} y2={55} w={10} />
+          <Arm x1={115} y1={75} x2={145} y2={55} w={10} />
+          <Bar x1={45} y1={50} x2={155} y2={50} w={6} />
+          <Leg x1={90} y1={110} x2={90} y2={150} w={14} />
+          <Leg x1={110} y1={110} x2={110} y2={150} w={14} />
+          <Foot cx={90} cy={150} rx={12} ry={5} />
+          <Foot cx={110} cy={150} rx={12} ry={5} />
+          <Arrow x1={50} y1={40} x2={50} y2={70} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>DISLOCATES</text>
+        </g>
+      );
+
+    // ===================== EQUILÍBRIO =====================
+    case 'bosu-squat-001':
+      return (
+        <g>
+          <ellipse cx={100} cy={150} rx={40} ry={12} fill={C.machine} />
+          <ellipse cx={100} cy={145} rx={30} ry={8} fill={C.machineDark} />
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={85} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={115} y2={145} w={14} />
+          <Foot cx={85} cy={145} rx={12} ry={5} />
+          <Foot cx={115} cy={145} rx={12} ry={5} />
+          <ellipse cx={100} cy={155} rx={20} ry={4} fill="none" stroke={C.green} strokeWidth={2} strokeDasharray="3 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>BOSU SQUAT</text>
+        </g>
+      );
+
+    case 'single-leg-deadlift-001':
+      return (
+        <g>
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={100} y2={150} w={14} />
+          <Leg x1={100} y1={110} x2={130} y2={90} w={14} />
+          <Foot cx={100} cy={150} rx={12} ry={5} />
+          <Foot cx={130} cy={90} rx={12} ry={5} />
+          <ellipse cx={100} cy={155} rx={20} ry={4} fill="none" stroke={C.green} strokeWidth={2} strokeDasharray="3 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>1 PERN. DEADLIFT</text>
+        </g>
+      );
+
+    case 'copenhagen-plank-001':
+      return (
+        <g>
+          <Bench x={50} y={120} w={100} h={20} />
+          <Head cx={70} cy={95} r={12} />
+          <Torso x1={70} y1={110} x2={100} y2={110} w={20} />
+          <Arm x1={60} y1={115} x2={50} y2={110} w={10} />
+          <Arm x1={80} y1={115} x2={90} y2={110} w={10} />
+          <Leg x1={100} y1={110} x2={100} y2={120} w={14} />
+          <Leg x1={100} y1={110} x2={130} y2={110} w={14} />
+          <Foot cx={100} cy={120} rx={12} ry={5} />
+          <Foot cx={130} cy={110} rx={12} ry={5} />
+          <rect x={45} y={125} width={90} height={5} rx={2} fill={C.green} opacity={0.7} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>COPENHAGEN</text>
+        </g>
+      );
+
+    case 'balance-board-001':
+      return (
+        <g>
+          <ellipse cx={100} cy={150} rx={35} ry={8} fill={C.machine} />
+          <ellipse cx={100} cy={145} rx={20} ry={5} fill={C.machineDark} />
+          <Head cx={100} cy={55} r={12} />
+          <Torso x1={100} y1={70} x2={100} y2={110} w={22} />
+          <Arm x1={85} y1={75} x2={85} y2={110} w={10} />
+          <Arm x1={115} y1={75} x2={115} y2={110} w={10} />
+          <Leg x1={90} y1={110} x2={85} y2={145} w={14} />
+          <Leg x1={110} y1={110} x2={115} y2={145} w={14} />
+          <Foot cx={85} cy={145} rx={12} ry={5} />
+          <Foot cx={115} cy={145} rx={12} ry={5} />
+          <ellipse cx={100} cy={155} rx={15} ry={3} fill="none" stroke={C.green} strokeWidth={2} strokeDasharray="3 2" />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>BALANCE BOARD</text>
+        </g>
+      );
+
+    default:
+      return (
+        <g>
+          <Head cx={100} cy={80} r={14} />
+          <Torso x1={100} y1={95} x2={100} y2={130} w={24} />
+          <Arm x1={85} y1={100} x2={70} y2={120} w={10} />
+          <Arm x1={115} y1={100} x2={130} y2={120} w={10} />
+          <Leg x1={90} y1={130} x2={85} y2={160} w={14} />
+          <Leg x1={110} y1={130} x2={115} y2={160} w={14} />
+          <Foot cx={85} cy={160} rx={12} ry={5} />
+          <Foot cx={115} cy={160} rx={12} ry={5} />
+          <text x={100} y={185} textAnchor="middle" fontSize={11} fill={C.text} fontWeight={700}>EXERCÍCIO</text>
+        </g>
+      );
+  }
+}
