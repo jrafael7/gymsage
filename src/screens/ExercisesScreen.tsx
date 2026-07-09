@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useExerciseStore } from '../stores/exerciseStore';
 import { useImageStore } from '../stores/imageStore';
 import { Exercise } from '../models/types';
+import { ExerciseIcon } from '../components/ExerciseIcon';
 import './ExercisesScreen.css';
 
 export const ExercisesScreen: React.FC = () => {
@@ -199,13 +200,15 @@ export const ExercisesScreen: React.FC = () => {
                     </button>
                   </div>
                 ) : (
-                  <button 
-                    className="image-upload-placeholder"
-                    onClick={() => triggerImageUpload(item.id)}
-                  >
-                    <span>📷</span>
-                    <span>Adicionar foto</span>
-                  </button>
+                  <div className="exercise-icon-wrapper">
+                    <ExerciseIcon exercise={item} size={80} />
+                    <button 
+                      className="image-replace-button"
+                      onClick={() => triggerImageUpload(item.id)}
+                    >
+                      + Foto
+                    </button>
+                  </div>
                 )}
                 <div className="exercise-info">
                   <div className="exercise-name">{item.name}</div>

@@ -4,6 +4,7 @@ import { useWorkoutStore } from '../stores/workoutStore';
 import { useExerciseStore } from '../stores/exerciseStore';
 import { useImageStore } from '../stores/imageStore';
 import { DivisionName, Exercise, WorkoutSet } from '../models/types';
+import { ExerciseIcon } from '../components/ExerciseIcon';
 import './WorkoutScreen.css';
 
 export const WorkoutScreen: React.FC = () => {
@@ -158,12 +159,16 @@ export const WorkoutScreen: React.FC = () => {
       </div>
 
       <div className="exercise-card">
-        {images[currentExercise.id] && (
+        {images[currentExercise.id] ? (
           <img 
             src={images[currentExercise.id]} 
             alt={currentExercise.name}
             className="workout-exercise-image"
           />
+        ) : (
+          <div className="workout-exercise-icon">
+            <ExerciseIcon exercise={currentExercise} size={200} />
+          </div>
         )}
         <div className="exercise-card-content">
           <h3 className="exercise-name">{currentExercise.name}</h3>
