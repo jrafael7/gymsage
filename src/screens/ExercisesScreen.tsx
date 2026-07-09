@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useExerciseStore } from '../stores/exerciseStore';
 import { useImageStore } from '../stores/imageStore';
 import { Exercise } from '../models/types';
-import { ExerciseIcon } from '../components/ExerciseIcon';
+import { ExerciseIllustration } from '../components/ExerciseIllustration';
 import './ExercisesScreen.css';
 
 export const ExercisesScreen: React.FC = () => {
@@ -201,7 +201,7 @@ export const ExercisesScreen: React.FC = () => {
                   </div>
                 ) : (
                   <div className="exercise-icon-wrapper">
-                    <ExerciseIcon exercise={item} size={80} />
+                    <ExerciseIllustration exercise={item} size={80} />
                     <button 
                       className="image-replace-button"
                       onClick={() => triggerImageUpload(item.id)}

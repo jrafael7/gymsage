@@ -178,19 +178,20 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.6);
   color: #ffffff;
   border: none;
-  padding: 3px;
-  font-size: 10px;
+  padding: 4px;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
   border-radius: 0 0 6px 6px;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.2s;
 }
 
 .exercise-icon-wrapper:hover .image-replace-button {
-  opacity: 1;
+  background-color: rgba(0,0,0,0.8);
 }
 
 .exercise-image-container {
