@@ -90,24 +90,24 @@ export const WorkoutScreen: React.FC = () => {
     if (!currentExercise || !activeSession) return;
 
     const setId = `set-${Date.now()}`;
-    await addSet(currentExercise.id, currentSet, reps, weight, 90);
-    await completeSet(setId, reps, weight, 90);
+    await addSet(currentExercise.id, currentSet, reps, weight, 60);
+    await completeSet(setId, reps, weight, 60);
 
     setCompletedSets((prev) => [
       ...prev,
-      { id: setId, sessionId: activeSession.id, exerciseId: currentExercise.id, setNumber: currentSet, reps, weight, restSeconds: 90, completed: true, notes: '' },
+      { id: setId, sessionId: activeSession.id, exerciseId: currentExercise.id, setNumber: currentSet, reps, weight, restSeconds: 60, completed: true, notes: '' },
     ]);
 
     if (currentSet < 4) {
       setCurrentSet(currentSet + 1);
       setIsResting(true);
-      setRestTimer(90);
+      setRestTimer(60);
     } else {
       if (currentExerciseIndex < exerciseList.length - 1) {
         setCurrentExerciseIndex(currentExerciseIndex + 1);
         setCurrentSet(1);
         setIsResting(true);
-        setRestTimer(120);
+        setRestTimer(60);
       } else {
         finishWorkout();
       }
@@ -165,12 +165,14 @@ export const WorkoutScreen: React.FC = () => {
             className="workout-exercise-image"
           />
         )}
-        <h3 className="exercise-name">{currentExercise.name}</h3>
-        <p className="exercise-type">{currentExercise.type} | {currentExercise.muscleGroup}</p>
-        <p className="exercise-instructions">{currentExercise.instructions}</p>
-        {currentExercise.isLumbarSafe && (
-          <div className="safe-badge">✓ Lombar Seguro</div>
-        )}
+        <div className="exercise-card-content">
+          <h3 className="exercise-name">{currentExercise.name}</h3>
+          <p className="exercise-type">{currentExercise.type} | {currentExercise.muscleGroup}</p>
+          <p className="exercise-instructions">{currentExercise.instructions}</p>
+          {currentExercise.isLumbarSafe && (
+            <div className="safe-badge">✓ Lombar Seguro</div>
+          )}
+        </div>
       </div>
 
       {isResting && (

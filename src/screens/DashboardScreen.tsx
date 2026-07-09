@@ -7,8 +7,14 @@ import { generateSuggestion, SuggestionContext } from '../services/suggestionEng
 import { initializeDatabase } from '../services/initService';
 import './DashboardScreen.css';
 
-const DIVISIONS: DivisionName[] = [
-  'pernas', 'costas', 'peito', 'braços', 'full-body', 'core/lombar', 'mobilidade/recuperação',
+const DIVISIONS: { name: DivisionName; icon: string }[] = [
+  { name: 'pernas', icon: '🧍' },
+  { name: 'costas', icon: '🦭' },
+  { name: 'peito', icon: '💪' },
+  { name: 'braços', icon: '🦾' },
+  { name: 'full-body', icon: '🤸' },
+  { name: 'core/lombar', icon: '🤽' },
+  { name: 'mobilidade/recuperação', icon: '🤱' },
 ];
 
 export const DashboardScreen: React.FC = () => {
@@ -79,7 +85,7 @@ export const DashboardScreen: React.FC = () => {
   if (loading) {
     return (
       <div className="dashboard-container">
-        <div className="loading">A carregar...</div>
+        <div className="dashboard-loading">A carregar...</div>
       </div>
     );
   }
@@ -87,18 +93,17 @@ export const DashboardScreen: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1 className="dashboard-title">GymSage</h1>
+        <h1 className="dashboard-logo">GymSage</h1>
         <p className="dashboard-subtitle">Sistema de manutenção do corpo</p>
-      </div>
-
-      <div className="stats-row">
-        <div className="stat-box">
-          <div className="stat-value">{weeklyCount}</div>
-          <div className="stat-label">Treinos esta semana</div>
-        </div>
-        <div className="stat-box">
-          <div className="stat-value">{lastSession ? getDaysSince(lastSession) : '-'}</div>
-          <div className="stat-label">Dias desde último</div>
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-value">{weeklyCount}</div>
+            <div className="stat-label">Treinos esta semana</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-value">{lastSession ? getDaysSince(lastSession) : '-'}</div>
+            <div className="stat-label">Dias desde último</div>
+          </div>
         </div>
       </div>
 
@@ -109,8 +114,8 @@ export const DashboardScreen: React.FC = () => {
         </div>
       )}
 
-      <div className="suggestion-box">
-        <div className="suggestion-label">SUGESTÃO DO DIA</div>
+      <div className="suggestion-card">
+        <div className="suggestion-label">Sugestão do Dia</div>
         <div className="suggestion-division">
           {suggestion ? getDivisionLabel(suggestion.division) : 'Full Body'}
         </div>
@@ -118,27 +123,27 @@ export const DashboardScreen: React.FC = () => {
           {suggestion?.reason || 'Iniciar treino.'}
         </div>
         <button
-          className="start-button"
+          className="suggestion-button"
           onClick={() => startWorkout(suggestion?.division || 'full-body')}
         >
           Iniciar Treino
         </button>
       </div>
 
-      <div className="section-title">OU ESCOLHER OUTRA DIVISÃO</div>
       <div className="divisions-grid">
         {DIVISIONS.map((division) => (
           <button
-            key={division}
-            className="division-button"
-            onClick={() => startWorkout(division)}
+            key={division.name}
+            className="division-card"
+            onClick={() => startWorkout(division.name)}
           >
-            {getDivisionLabel(division)}
+            <div className="division-icon">{division.icon}</div>
+            <div className="division-name">{getDivisionLabel(division.name)}</div>
           </button>
         ))}
       </div>
 
-      <div className="footer-nav">
+      <div className="footer">
         <button className="footer-button" onClick={() => navigate('/history')}>
           Histórico
         </button>
@@ -150,8 +155,8 @@ export const DashboardScreen: React.FC = () => {
         </button>
       </div>
 
-      <button className="dafit-button" onClick={() => navigate('/dafit')}>
-        Importar Da Fit
+      <button className="da-fit-button" onClick={() => navigate('/dafit')}>
+        <span>📊</span> Importar Da Fit
       </button>
     </div>
   );
