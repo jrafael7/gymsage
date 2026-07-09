@@ -1,0 +1,140 @@
+.history-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.history-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.back-button {
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #d0d0d0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.summary-box {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  width: 30%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.summary-value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #666666;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.session-item {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+
+.session-item:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.session-item.warning {
+  border-left: 4px solid #ffc107;
+}
+
+.session-item.selected {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.session-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.session-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.session-division {
+  font-size: 14px;
+  color: #666666;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.session-meta {
+  font-size: 13px;
+  color: #888888;
+}
+
+.lumbar-badge {
+  font-size: 12px;
+  color: #856404;
+  background-color: #fff3cd;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.session-detail {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
+  font-size: 14px;
+  color: #444444;
+}
+
+.session-detail div {
+  margin-bottom: 4px;
+}
+
+.empty-text {
+  text-align: center;
+  color: #666666;
+  font-size: 16px;
+  margin-top: 40px;
+}

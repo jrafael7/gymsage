@@ -1,0 +1,202 @@
+.dashboard-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.dashboard-header {
+  background-color: #1a1a1a;
+  padding: 24px 16px;
+  text-align: center;
+  border-radius: 8px;
+  margin: -16px -16px 16px -16px;
+}
+
+.dashboard-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.dashboard-subtitle {
+  font-size: 14px;
+  color: #888888;
+  margin: 4px 0 0 0;
+  letter-spacing: 0.5px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: #666666;
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1a1a1a;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666666;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.warning-box {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.warning-icon {
+  font-size: 18px;
+}
+
+.warning-text {
+  color: #856404;
+  font-size: 14px;
+  flex: 1;
+}
+
+.suggestion-box {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+
+.suggestion-label {
+  font-size: 12px;
+  color: #666666;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.suggestion-division {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.suggestion-reason {
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.start-button {
+  width: 100%;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.start-button:hover {
+  background-color: #333333;
+}
+
+.section-title {
+  font-size: 12px;
+  color: #666666;
+  letter-spacing: 1px;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.divisions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.division-button {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.division-button:hover {
+  background-color: #f0f0f0;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.footer-button {
+  padding: 12px 16px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.footer-button:hover {
+  background-color: #d0d0d0;
+}
+
+.dafit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dafit-button:hover {
+  background-color: #f0f0f0;
+}

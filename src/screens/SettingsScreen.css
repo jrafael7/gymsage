@@ -1,0 +1,134 @@
+.settings-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.settings-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.back-button {
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #d0d0d0;
+}
+
+.settings-section {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 12px;
+  color: #666666;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.input-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.input-row label {
+  font-size: 16px;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.input-row input[type="number"] {
+  width: 80px;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.switch-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.switch-row label {
+  font-size: 16px;
+  color: #1a1a1a;
+}
+
+.save-button {
+  width: 100%;
+  padding: 16px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.save-button:hover {
+  background-color: #333333;
+}
+
+.action-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #e0e0e0;
+  color: #1a1a1a;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #d0d0d0;
+}
+
+.settings-footer {
+  text-align: center;
+  padding: 24px;
+  margin-top: 16px;
+}
+
+.footer-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #888888;
+  letter-spacing: 1px;
+}
+
+.footer-sub {
+  font-size: 12px;
+  color: #aaaaaa;
+  margin-top: 4px;
+}

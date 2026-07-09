@@ -1,0 +1,87 @@
+.dafit-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 32px;
+}
+
+.dafit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.dafit-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.back-button {
+  padding: 8px 16px;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #d0d0d0;
+}
+
+.instructions {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #444444;
+  line-height: 1.6;
+}
+
+.json-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  min-height: 200px;
+  margin-bottom: 16px;
+  font-family: monospace;
+  resize: vertical;
+}
+
+.import-button {
+  width: 100%;
+  padding: 16px;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.import-button:hover:not(:disabled) {
+  background-color: #333333;
+}
+
+.import-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.result-box {
+  background-color: #d4edda;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 16px;
+  text-align: center;
+  color: #155724;
+  font-size: 14px;
+}
