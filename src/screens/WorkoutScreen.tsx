@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useWorkoutStore } from '../stores/workoutStore';
 import { useExerciseStore } from '../stores/exerciseStore';
+import { useImageStore } from '../stores/imageStore';
 import { DivisionName, Exercise, WorkoutSet } from '../models/types';
 import './WorkoutScreen.css';
 
@@ -9,6 +10,7 @@ export const WorkoutScreen: React.FC = () => {
   const { division } = useParams<{ division: string }>();
   const navigate = useNavigate();
   const { exercises, getSubstitutions } = useExerciseStore();
+  const { images, loadImages } = useImageStore();
   const { startWorkout, addSet, completeSet, endWorkout, activeSession } = useWorkoutStore();
 
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
@@ -26,6 +28,10 @@ export const WorkoutScreen: React.FC = () => {
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<Date | null>(null);
+
+  useEffect(() => {
+    loadImages();
+  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -152,6 +158,13 @@ export const WorkoutScreen: React.FC = () => {
       </div>
 
       <div className="exercise-card">
+        {images[currentExercise.id] && (
+          <img 
+            src={images[currentExercise.id]} 
+            alt={currentExercise.name}
+            className="workout-exercise-image"
+          />
+        )}
         <h3 className="exercise-name">{currentExercise.name}</h3>
         <p className="exercise-type">{currentExercise.type} | {currentExercise.muscleGroup}</p>
         <p className="exercise-instructions">{currentExercise.instructions}</p>

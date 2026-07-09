@@ -1,7 +1,7 @@
 import { openDB, IDBPDatabase } from 'idb';
 
 const DB_NAME = 'gymsage-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let db: IDBPDatabase<any> | null = null;
 
@@ -9,12 +9,15 @@ export const initDatabase = async (): Promise<IDBPDatabase<any>> => {
   if (db) return db;
 
   db = await openDB(DB_NAME, DB_VERSION, {
-    upgrade(db) {
+    upgrade(db, oldVersion) {
       if (!db.objectStoreNames.contains('exercises')) {
         const store = db.createObjectStore('exercises', { keyPath: 'id' });
         store.createIndex('by-muscle', 'muscle_group');
         store.createIndex('by-lumbar', 'is_lumbar_safe');
         store.createIndex('by-custom', 'is_custom');
+      }
+      if (!db.objectStoreNames.contains('exercise_images')) {
+        db.createObjectStore('exercise_images', { keyPath: 'exercise_id' });
       }
       if (!db.objectStoreNames.contains('workout_plans')) {
         const store = db.createObjectStore('workout_plans', { keyPath: 'id' });

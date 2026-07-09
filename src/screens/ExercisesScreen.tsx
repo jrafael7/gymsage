@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useExerciseStore } from '../stores/exerciseStore';
+import { useImageStore } from '../stores/imageStore';
 import { Exercise } from '../models/types';
 import './ExercisesScreen.css';
 
 export const ExercisesScreen: React.FC = () => {
   const navigate = useNavigate();
   const { exercises, loadExercises, addExercise, deleteExercise } = useExerciseStore();
+  const { images, loadImages, saveImage, deleteImage } = useImageStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedExerciseId, setSelectedExerciseId] = useState<string | null>(null);
+  
   const [filter, setFilter] = useState('');
   const [showAdd, setShowAdd] = useState(false);
   const [newExercise, setNewExercise] = useState({
@@ -20,6 +25,7 @@ export const ExercisesScreen: React.FC = () => {
 
   useEffect(() => {
     loadExercises();
+    loadImages();
   }, []);
 
   const filteredExercises = filter
@@ -63,11 +69,43 @@ export const ExercisesScreen: React.FC = () => {
   const handleDelete = (id: string, name: string) => {
     if (window.confirm(`Eliminar "${name}"?`)) {
       deleteExercise(id);
+      deleteImage(id);
     }
+  };
+
+  const handleImageUpload = (exerciseId: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target?.result as string;
+      if (base64) {
+        saveImage(exerciseId, base64);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const triggerImageUpload = (exerciseId: string) => {
+    setSelectedExerciseId(exerciseId);
+    fileInputRef.current?.click();
   };
 
   return (
     <div className="exercises-container">
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        accept="image/*"
+        onChange={(e) => {
+          if (selectedExerciseId) {
+            handleImageUpload(selectedExerciseId, e);
+          }
+        }}
+      />
+
       <div className="exercises-header">
         <h2 className="exercises-title">Biblioteca de Exercícios</h2>
         <button className="back-button" onClick={() => navigate('/')}>Voltar</button>
@@ -145,23 +183,47 @@ export const ExercisesScreen: React.FC = () => {
       )}
 
       <div className="exercises-list">
-        {filteredExercises.map((item) => (
-          <div key={item.id} className="exercise-item">
-            <div className="exercise-info">
-              <div className="exercise-name">{item.name}</div>
-              <div className="exercise-meta">
-                {item.muscleGroup} | {item.type}
-                {item.isLumbarSafe && ' | ✓ Lombar Seguro'}
-                {item.isCustom && ' | [Personalizado]'}
+        {filteredExercises.map((item) => {
+          const imageData = images[item.id];
+          return (
+            <div key={item.id} className="exercise-item">
+              <div className="exercise-content">
+                {imageData ? (
+                  <div className="exercise-image-container">
+                    <img src={imageData} alt={item.name} className="exercise-image" />
+                    <button 
+                      className="image-replace-button"
+                      onClick={() => triggerImageUpload(item.id)}
+                    >
+                      Trocar
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    className="image-upload-placeholder"
+                    onClick={() => triggerImageUpload(item.id)}
+                  >
+                    <span>📷</span>
+                    <span>Adicionar foto</span>
+                  </button>
+                )}
+                <div className="exercise-info">
+                  <div className="exercise-name">{item.name}</div>
+                  <div className="exercise-meta">
+                    {item.muscleGroup} | {item.type}
+                    {item.isLumbarSafe && ' | ✓ Lombar Seguro'}
+                    {item.isCustom && ' | [Personalizado]'}
+                  </div>
+                </div>
               </div>
+              {item.isCustom && (
+                <button className="delete-button" onClick={() => handleDelete(item.id, item.name)}>
+                  Eliminar
+                </button>
+              )}
             </div>
-            {item.isCustom && (
-              <button className="delete-button" onClick={() => handleDelete(item.id, item.name)}>
-                Eliminar
-              </button>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
